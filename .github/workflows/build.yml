@@ -2,16 +2,14 @@ name: Build Helgi Remote APK
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build Debug APK
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
@@ -19,17 +17,16 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
-      - name: Grant execute permission for Gradle wrapper
-        run: chmod +x gradlew
+      - name: Make gradlew executable
+        run: chmod +x helgi-remote/gradlew
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug --no-daemon
+      - name: Build Debug APK
+        run: cd helgi-remote && ./gradlew assembleDebug
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: helgi-remote-debug.apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: helgi-remote-debug
+          path: helgi-remote/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
