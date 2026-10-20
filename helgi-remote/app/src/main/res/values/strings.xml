@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Helgi Remote</string>
+    <string name="notification_channel_name">Helgi Remote</string>
+    <string name="notification_channel_description">Server HTTP per controllo remoto lavagna Helgi</string>
+    <string name="notification_title">Helgi Remote — Attivo</string>
+    <string name="notification_text">Server HTTP in ascolto sulla porta 8080</string>
+</resources>
