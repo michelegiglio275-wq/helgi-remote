@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
@@ -187,7 +188,7 @@ public class ControlServer extends NanoHTTPD {
                 Runtime.getRuntime().exec("reboot -p");
             } catch (IOException ignored) {}
             // Fallback: broadcast (works only with proper system permissions)
-            Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
+            Intent intent = new Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN");
             intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
@@ -265,7 +266,7 @@ public class ControlServer extends NanoHTTPD {
             // decide to turn off the display. Combined with a reboot of the
             // screen policy via goToSleep (API 20+).
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-                powerManager.goToSleep(android.os.SystemClock.uptimeMillis());
+                try { java.lang.reflect.Method m = powerManager.getClass().getMethod("goToSleep", long.class); m.invoke(powerManager, android.os.SystemClock.uptimeMillis()); } catch (Exception e) { /* not available */ }
             } else {
                 PowerManager.WakeLock wl = powerManager.newWakeLock(
                         PowerManager.PARTIAL_WAKE_LOCK, "helgi:screenoff");
